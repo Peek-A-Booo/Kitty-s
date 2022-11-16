@@ -7,8 +7,8 @@ import {
   Logger,
 } from '@nestjs/common';
 import type { Response } from 'express';
-import { Observable } from 'rxjs';
-import { tap, map } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { tap, map, catchError } from 'rxjs/operators';
 import { BaseResDto } from '../common/dto/response.dto';
 
 @Injectable()
@@ -24,30 +24,28 @@ export class TransformInterceptor implements NestInterceptor {
     const res = ctx.getResponse<Response>();
 
     const response: BaseResDto = {
-      code: 0,
+      error: 0,
       message: 'success',
     };
-
-    console.log(response, 'res');
-
-    const now = Date.now();
 
     return next
       .handle()
       .pipe(
         map((data) => {
-          console.log(data, 'data');
-          /* 处理POST的正确返回码，由201统一为200 */
+          /* 将POST响应码由 201 调整为 200，符合统一处理的规则 */
           if (req.method === 'POST' && res.statusCode === HttpStatus.CREATED) {
             res.statusCode = HttpStatus.OK;
           }
-
-          return data;
+          if (data) response.data = data;
+          return response;
+        }),
+        catchError((error) => {
+          return throwError(() => error);
         }),
       )
       .pipe(
         tap(() => {
-          this.logger.log(`After... ${Date.now() - now}ms`);
+          // this.logger.log(`After... ${Date.now() - now}ms`);
         }),
       );
   }

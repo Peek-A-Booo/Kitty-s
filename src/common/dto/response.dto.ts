@@ -6,12 +6,17 @@ export abstract class BaseResDto {
    * 返回状态码。
    * 为 0 代表正常，为 -1 代表一般错误，其他code代表特殊错误
    */
-  code: number;
+  error: number;
 
   /**
    * 返回描述信息
    */
   message: string;
+
+  /**
+   * 额外需要返回的数据
+   */
+  data?: any;
 }
 
 /**

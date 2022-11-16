@@ -4,9 +4,11 @@ import { AppController } from './app.controller';
 import { ProjectModule } from './modules/project/project.module';
 import { GroupModule } from './modules/group/group.module';
 import { LogModule } from './modules/log/log.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',

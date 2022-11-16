@@ -1,12 +1,18 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Post, Query, Body } from '@nestjs/common';
 import { ProjectService } from './project.service';
+import { CreateProjectDto, ProjectDto } from './dto';
 
-@Controller()
+@Controller('project')
 export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
 
-  @Get('test')
-  test() {
-    return this.projectService.test();
+  @Get('find')
+  find(@Query() query: ProjectDto) {
+    return this.projectService.find(query);
+  }
+
+  @Post('create')
+  create(@Body() createProjectDto: CreateProjectDto) {
+    return this.projectService.create(createProjectDto);
   }
 }
