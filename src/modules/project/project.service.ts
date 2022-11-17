@@ -11,7 +11,7 @@ export class ProjectService {
     private projectRepository: Repository<Project>,
   ) {}
 
-  // 新增
+  // 新增project
   async create(params: CreateProjectDto) {
     const { name, desc } = params;
     await this.projectRepository
@@ -22,7 +22,19 @@ export class ProjectService {
       .execute();
   }
 
-  // 查询
+  // 删除project
+  async delete(id: number) {
+    console.log(id, '删除');
+    const res = await this.projectRepository
+      .createQueryBuilder('project')
+      .delete()
+      .from(Project)
+      .where('id = :id', { id })
+      .execute();
+    console.log(res, 'res');
+  }
+
+  // 查询project
   async find(params: ProjectDto) {
     const { name, page, pageSize } = params;
 

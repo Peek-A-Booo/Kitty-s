@@ -17,6 +17,9 @@ export class Project {
   @Column({ length: 200, comment: '项目备注' })
   desc: string;
 
+  @Column({ comment: '创建人' })
+  creator: string;
+
   @CreateDateColumn({ type: 'timestamp', comment: '创建时间' })
   cTime: Date;
 
